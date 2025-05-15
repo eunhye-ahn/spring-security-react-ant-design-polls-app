@@ -2,19 +2,23 @@ package com.example.polls.controller;
 
 import com.example.polls.model.User;
 import com.example.polls.payload.Request.CreateGroupRequest;
+
 import com.example.polls.payload.Request.JoinGroupRequest;
 import com.example.polls.payload.Response.GroupDetailResponse;
 import com.example.polls.payload.Response.GroupSummaryResponse;
 import com.example.polls.repository.UserRepository;
+
 import com.example.polls.security.UserPrincipal;
 import com.example.polls.service.GroupService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/groups")
@@ -36,6 +40,7 @@ public class GroupController {
         GroupSummaryResponse response = groupService.createGroup(request, creator);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+
 
     @GetMapping("/my")
     public ResponseEntity<List<GroupSummaryResponse>> getMyGroups(@AuthenticationPrincipal UserPrincipal userPrincipal) {

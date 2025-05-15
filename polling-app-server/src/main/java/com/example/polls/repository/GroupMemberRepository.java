@@ -1,5 +1,6 @@
 package com.example.polls.repository;
 
+
 import com.example.polls.model.Group;
 import com.example.polls.model.GroupMember;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,4 +14,5 @@ public interface GroupMemberRepository extends JpaRepository<GroupMember, Long> 
     List<Group> findGroupsByUserId(@Param("userId") Long userId);
 
     boolean existsByUserIdAndGroupId(Long userId, Long groupId);
+
 }

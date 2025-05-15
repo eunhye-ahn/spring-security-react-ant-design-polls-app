@@ -1,14 +1,18 @@
 package com.example.polls.service;
 
+
 import com.example.polls.exception.AlreadyJoinedException;
 import com.example.polls.exception.BadRequestException;
 import com.example.polls.exception.ResourceNotFoundException;
+
 import com.example.polls.model.Group;
 import com.example.polls.model.GroupMember;
 import com.example.polls.model.GroupRole;
 import com.example.polls.model.User;
 import com.example.polls.payload.Request.CreateGroupRequest;
+
 import com.example.polls.payload.Response.GroupDetailResponse;
+
 import com.example.polls.payload.Response.GroupSummaryResponse;
 import com.example.polls.repository.GroupMemberRepository;
 import com.example.polls.repository.GroupRepository;
@@ -20,7 +24,6 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
 @Service
 @RequiredArgsConstructor
 public class GroupService {
@@ -79,6 +82,7 @@ public class GroupService {
     }
 
 
+
     //내 그룹 조회
     public List<GroupSummaryResponse> getGroupsForUser(Long userId) {
         List<Group> groups = groupMemberRepository.findGroupsByUserId(userId);
@@ -123,5 +127,5 @@ public class GroupService {
 
         return new GroupDetailResponse(group.getId(),group.getName(),group.getImageUrl(),members);
 
-    }
+
 }
