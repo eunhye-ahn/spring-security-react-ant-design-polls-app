@@ -21,9 +21,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class GroupService {
@@ -91,6 +93,7 @@ public class GroupService {
                 .collect(Collectors.toList());
     }
 
+
     //조인 코드로 그룹 참여
     public void joinCode(Long userId, String joinCode) {
         Group group = groupRepository.findByJoinCode(joinCode)
@@ -126,6 +129,7 @@ public class GroupService {
                 .collect(Collectors.toList());
 
         return new GroupDetailResponse(group.getId(),group.getName(),group.getImageUrl(),members);
+
 
 
 }

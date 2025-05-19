@@ -20,4 +20,5 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
     @Query("SELECT g FROM Group g Join g.members gm WHERE gm.user.id = :userId")
     List<Group> findAllByUserId(@Param("userId") Long userId);
 
+
 }

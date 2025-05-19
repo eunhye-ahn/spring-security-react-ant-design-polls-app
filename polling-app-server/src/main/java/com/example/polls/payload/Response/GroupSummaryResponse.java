@@ -5,7 +5,6 @@ import com.example.polls.model.Group;
 
 
 
-
 public class GroupSummaryResponse {
     private Long id;
     private String name;

@@ -15,9 +15,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 
 
 @RestController
@@ -48,6 +50,7 @@ public class GroupController {
         List<GroupSummaryResponse> groups = groupService.getGroupsForUser(useId);
         return ResponseEntity.ok(groups);
     }
+
 
     @PostMapping("/join")
     public ResponseEntity<String> joinGroup(@RequestBody JoinGroupRequest request, @AuthenticationPrincipal UserPrincipal userPrincipal) {
