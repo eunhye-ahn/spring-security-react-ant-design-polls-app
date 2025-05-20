@@ -10,9 +10,13 @@ import com.example.polls.model.GroupMember;
 import com.example.polls.model.GroupRole;
 import com.example.polls.model.User;
 import com.example.polls.payload.Request.CreateGroupRequest;
+<<<<<<< HEAD
 
 import com.example.polls.payload.Response.GroupDetailResponse;
 
+=======
+import com.example.polls.payload.Response.GroupDetailResponse;
+>>>>>>> 1d9dfc6 (그룹 상세 조회 api)
 import com.example.polls.payload.Response.GroupSummaryResponse;
 import com.example.polls.repository.GroupMemberRepository;
 import com.example.polls.repository.GroupRepository;
@@ -129,7 +133,6 @@ public class GroupService {
                 .collect(Collectors.toList());
 
         return new GroupDetailResponse(group.getId(),group.getName(),group.getImageUrl(),members);
-
 
 
 }
