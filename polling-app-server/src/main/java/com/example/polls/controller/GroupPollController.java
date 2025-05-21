@@ -49,5 +49,4 @@ public class GroupPollController {
         return ResponseEntity.ok(response);
     }
 
-
 }
