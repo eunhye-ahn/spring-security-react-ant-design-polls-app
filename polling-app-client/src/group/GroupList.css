@@ -1,0 +1,37 @@
+.group-slider {
+  margin: 20px 0;
+}
+
+.slider-container {
+  display: flex;
+  overflow-x: auto;
+  gap: 16px;
+  padding: 10px;
+}
+
+.group-card {
+  flex: 0 0 auto;
+  width: 200px;
+  padding: 16px;
+  background: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  text-align: center;
+  transition: transform 0.2s;
+}
+
+.group-card:hover {
+  transform: scale(1.05);
+}
+
+.group-name {
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.group-members {
+  font-size: 14px;
+  color: #666;
+}
