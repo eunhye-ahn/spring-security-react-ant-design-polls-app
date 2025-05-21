@@ -4,14 +4,16 @@ import com.example.polls.exception.BadRequestException;
 import com.example.polls.exception.ResourceNotFoundException;
 import com.example.polls.model.*;
 
+
 import com.example.polls.payload.PagedResponse;
 import com.example.polls.payload.PollResponse;
 import com.example.polls.payload.VoteRequest;
 import com.example.polls.repository.PollRepository;
 import com.example.polls.repository.UserRepository;
 import com.example.polls.repository.VoteRepository;
-import com.example.polls.payload.Request.PollRequest;
-import com.example.polls.repository.*;
+import com.example.polls.payload.PollRequest;
+
+
 import com.example.polls.security.UserPrincipal;
 import com.example.polls.util.AppConstants;
 import com.example.polls.util.ModelMapper;
@@ -53,6 +55,7 @@ public class PollService {
     private GroupService groupService;
     @Autowired
     private GroupMemberRepository groupMemberRepository;
+
 
     private PagedResponse<PollResponse> mapPollPagetoPageResponse(UserPrincipal currentUser, Page<Poll> polls) {
         if(polls.getNumberOfElements() == 0) {
@@ -103,6 +106,7 @@ public class PollService {
 
         return mapPollPagetoPageResponse(userPrincipal, polls);
     }
+
 
     public PagedResponse<PollResponse> getPollsCreatedBy(String username, UserPrincipal currentUser, int page, int size) {
         validatePageNumberAndSize(page, size);

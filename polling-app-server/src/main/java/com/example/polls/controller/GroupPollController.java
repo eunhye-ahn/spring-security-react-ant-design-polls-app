@@ -40,6 +40,7 @@ public class GroupPollController {
         return ResponseEntity.ok(response);
     }
 
+
     @GetMapping("/{pollId}")
     public ResponseEntity<PollResponse> getPollByIdInGroup(@PathVariable Long groupId,
                                                            @PathVariable Long pollId,
@@ -47,5 +48,6 @@ public class GroupPollController {
         PollResponse response = pollService.getPollByIdInGroup(pollId, groupId, userPrincipal);
         return ResponseEntity.ok(response);
     }
+
 
 }
