@@ -50,6 +50,7 @@ public class PollService {
     @Autowired
     private GroupMemberRepository groupMemberRepository;
 
+
     private PagedResponse<PollResponse> mapPollPagetoPageResponse(UserPrincipal currentUser, Page<Poll> polls) {
         if(polls.getNumberOfElements() == 0) {
             return new PagedResponse<>(Collections.emptyList(), polls.getNumber(),
@@ -99,6 +100,7 @@ public class PollService {
 
         return mapPollPagetoPageResponse(userPrincipal, polls);
     }
+
 
     public PagedResponse<PollResponse> getPollsCreatedBy(String username, UserPrincipal currentUser, int page, int size) {
         validatePageNumberAndSize(page, size);
@@ -192,7 +194,6 @@ public class PollService {
 
         return pollRepository.save(poll);
     }
-
 
     public Poll createPoll(PollRequest pollRequest) {
         return createPollInternal(pollRequest, null, null);
