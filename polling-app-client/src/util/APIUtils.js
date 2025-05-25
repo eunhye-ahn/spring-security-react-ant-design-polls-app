@@ -117,3 +117,10 @@ export function getUserVotedPolls(username, page, size) {
         method: 'GET'
     });
 }
+
+export function getMyGroups() {
+    return request({
+        url: API_BASE_URL + "/groups/my",
+        method: 'GET'
+    });
+}
