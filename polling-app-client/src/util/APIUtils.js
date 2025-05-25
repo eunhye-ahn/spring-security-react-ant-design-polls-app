@@ -129,6 +129,7 @@ export function getMyGroups() {
         url: API_BASE_URL + "/groups/my",
         method: 'GET'
     });
+<<<<<<< HEAD
 }
 
 export function createGroup(groupData) {
@@ -160,3 +161,6 @@ export function getPollsByGroupId(groupId) {
         method: 'GET'
     });
 }
+=======
+}
+>>>>>>> 5216a66 (그룹멤버 수 추가)

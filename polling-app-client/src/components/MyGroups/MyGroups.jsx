@@ -1,10 +1,16 @@
 import React, { Component } from "react";
+<<<<<<< HEAD
 import "./MyGroups.css";
 import { withRouter } from 'react-router-dom';
 import { getMyGroups } from '../../util/APIUtils';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
+=======
+import { ACCESS_TOKEN } from '../../constants';
+import "./MyGroups.css";
+import { getMyGroups } from '../../util/APIUtils';
+>>>>>>> 5216a66 (그룹멤버 수 추가)
 
 class MyGroups extends Component {
   constructor(props) {
@@ -17,6 +23,10 @@ class MyGroups extends Component {
   }
 
   componentDidMount() {
+<<<<<<< HEAD
+=======
+    const token = localStorage.getItem(ACCESS_TOKEN);
+>>>>>>> 5216a66 (그룹멤버 수 추가)
 
     getMyGroups()
     .then((data) => {
@@ -25,6 +35,7 @@ class MyGroups extends Component {
     .catch((error) => {
       this.setState({ error: error.message || "에러 발생", loading: false });
     });
+<<<<<<< HEAD
 
   }
 
@@ -35,6 +46,12 @@ class MyGroups extends Component {
   render() {
     const { groups, loading, error } = this.state;
     
+=======
+  }
+
+  render() {
+    const { groups, loading, error } = this.state;
+>>>>>>> 5216a66 (그룹멤버 수 추가)
 
     return (
       <div className="my-groups-container">
@@ -46,6 +63,7 @@ class MyGroups extends Component {
         ) : groups.length === 0 ? (
           <p>참여한 그룹이 없습니다.</p>
         ) : (
+<<<<<<< HEAD
               <div className="group-list">
             {groups.map((group) => (
     <div key={group.id}>
@@ -65,9 +83,27 @@ class MyGroups extends Component {
     </div>
   ))}
       </div>
+=======
+          <div className="group-card-list">
+            {groups.map((group) => (
+              <div key={group.id} className="group-card">
+                <div className="group-avatar" />
+                <div className="group-info">
+                  <div className="group-name">{group.name}</div>
+                  <div className="group-count">멤버 {group.memberCount}명</div>
+                </div>
+              </div>
+            ))}
+          </div>
+>>>>>>> 5216a66 (그룹멤버 수 추가)
         )}
       </div>
     );
   }
 }
+<<<<<<< HEAD
 export default withRouter(MyGroups);
+=======
+
+export default MyGroups;
+>>>>>>> 5216a66 (그룹멤버 수 추가)
