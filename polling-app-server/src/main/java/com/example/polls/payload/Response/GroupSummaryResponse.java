@@ -9,12 +9,23 @@ public class GroupSummaryResponse {
     private String name;
     private String imageUrl;
     private String joinCode;
+    private int memberCount;
 
     public GroupSummaryResponse(Group group) {
         this.id = group.getId();
         this.name = group.getName();
         this.joinCode = group.getJoinCode();
         this.imageUrl = group.getImageUrl();
+        this.memberCount = group.getMembers().size();
+
+    }
+
+    public int getMemberCount() {
+        return memberCount;
+    }
+
+    public void setMemberCount(int memberCount) {
+        this.memberCount = memberCount;
     }
 
     public Long getId() {
