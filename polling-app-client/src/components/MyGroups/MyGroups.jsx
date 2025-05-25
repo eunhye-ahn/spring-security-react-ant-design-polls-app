@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import { ACCESS_TOKEN } from '../../constants';
 import "./MyGroups.css";
 import { getMyGroups } from '../../util/APIUtils';
+
 
 class MyGroups extends Component {
   constructor(props) {
@@ -14,7 +14,6 @@ class MyGroups extends Component {
   }
 
   componentDidMount() {
-    const token = localStorage.getItem(ACCESS_TOKEN);
 
     getMyGroups()
     .then((data) => {
@@ -23,6 +22,7 @@ class MyGroups extends Component {
     .catch((error) => {
       this.setState({ error: error.message || "에러 발생", loading: false });
     });
+
   }
 
   render() {
