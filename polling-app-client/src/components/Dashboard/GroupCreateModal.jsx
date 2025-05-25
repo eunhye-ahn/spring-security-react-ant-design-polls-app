@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
+<<<<<<< HEAD
 import { createGroup, getAllUsers } from '../../util/APIUtils';
 import { Modal, Input, message} from 'antd';
 import GroupMemberSelector from './GroupMemberSelector';
 
+=======
+import { Modal, Input, message } from 'antd';
+import { ACCESS_TOKEN } from '../../constants';
+>>>>>>> 62f553a (apiUtil 이용해서 api 접근)
 
 class GroupCreateModal extends Component {
   constructor(props) {
@@ -10,6 +15,7 @@ class GroupCreateModal extends Component {
     this.state = {
       name: '',
       description: '',
+<<<<<<< HEAD
       imageUrl: '',
         users: [],
   selectedUserIds: [],
@@ -29,10 +35,17 @@ class GroupCreateModal extends Component {
     });
 }
 
+=======
+      imageUrl: ''
+    };
+  }
+
+>>>>>>> 62f553a (apiUtil 이용해서 api 접근)
   handleChange = (field, value) => {
     this.setState({ [field]: value });
   }
 
+<<<<<<< HEAD
     handleUserSelect = userId => {
     const { selectedUserIds } = this.state;
     const newList = selectedUserIds.includes(userId)
@@ -63,6 +76,29 @@ class GroupCreateModal extends Component {
 
 
 
+=======
+  handleSubmit = () => {
+    const { name, description, imageUrl } = this.state;
+    const token = localStorage.getItem(ACCESS_TOKEN);
+
+    fetch('/api/groups', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ name, description, imageUrl }),
+    })
+      .then(res => {
+        if (!res.ok) throw new Error('생성 실패');
+        return res.json();
+      })
+      .then(data => {
+        message.success(`그룹 "${data.name}" 생성 완료`);
+        this.props.onCreated(); // 부모 콜백 실행
+        this.props.onClose();   // 모달 닫기
+      })
+>>>>>>> 62f553a (apiUtil 이용해서 api 접근)
       .catch(() => {
         message.error('그룹 생성에 실패했습니다.');
       });
@@ -70,7 +106,11 @@ class GroupCreateModal extends Component {
 
   render() {
     const { visible, onClose } = this.props;
+<<<<<<< HEAD
     const { name, description, imageUrl, users, selectedUserIds } = this.state;
+=======
+    const { name, description, imageUrl } = this.state;
+>>>>>>> 62f553a (apiUtil 이용해서 api 접근)
 
     return (
       <Modal
@@ -81,21 +121,28 @@ class GroupCreateModal extends Component {
         okText="생성"
         cancelText="취소"
       >
+<<<<<<< HEAD
         <div className="form-group">
           <label className="form-label" style={{display:"flex"}}>그룹 이름<p style={{color : "red"}}> *</p></label>
+=======
+>>>>>>> 62f553a (apiUtil 이용해서 api 접근)
         <Input
           placeholder="그룹 이름"
           value={name}
           onChange={e => this.handleChange('name', e.target.value)}
           style={{ marginBottom: 12 }}
         />
+<<<<<<< HEAD
         </div>
           <div className="form-group">
           <label className="form-label">그룹 소개</label>
+=======
+>>>>>>> 62f553a (apiUtil 이용해서 api 접근)
         <Input.TextArea
           placeholder="그룹 소개"
           value={description}
           onChange={e => this.handleChange('description', e.target.value)}
+<<<<<<< HEAD
                       maxLength={200}
           rows={3}
           style={{ marginBottom: 12 }}
@@ -105,10 +152,17 @@ class GroupCreateModal extends Component {
                 <div className="form-group">
           <label className="form-label">그룹 이미지</label>
                   <Input
+=======
+          rows={3}
+          style={{ marginBottom: 12 }}
+        />
+        <Input
+>>>>>>> 62f553a (apiUtil 이용해서 api 접근)
           placeholder="이미지 URL (선택)"
           value={imageUrl}
           onChange={e => this.handleChange('imageUrl', e.target.value)}
         />
+<<<<<<< HEAD
         </div>
                 <div className="form-group">
           <label className="form-label">그룹 멤버 선택</label>
@@ -119,6 +173,8 @@ class GroupCreateModal extends Component {
   onChange={(ids) => this.setState({ selectedUserIds: ids })}
 />
         </div>
+=======
+>>>>>>> 62f553a (apiUtil 이용해서 api 접근)
       </Modal>
     );
   }

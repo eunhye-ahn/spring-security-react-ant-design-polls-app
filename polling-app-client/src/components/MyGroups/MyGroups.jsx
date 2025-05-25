@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 <<<<<<< HEAD
+<<<<<<< HEAD
 import "./MyGroups.css";
 import { withRouter } from 'react-router-dom';
 import { getMyGroups } from '../../util/APIUtils';
@@ -8,9 +9,12 @@ import "slick-carousel/slick/slick-theme.css";
 
 =======
 import { ACCESS_TOKEN } from '../../constants';
+=======
+>>>>>>> 62f553a (apiUtil 이용해서 api 접근)
 import "./MyGroups.css";
 import { getMyGroups } from '../../util/APIUtils';
 >>>>>>> 5216a66 (그룹멤버 수 추가)
+
 
 class MyGroups extends Component {
   constructor(props) {
@@ -24,9 +28,12 @@ class MyGroups extends Component {
 
   componentDidMount() {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     const token = localStorage.getItem(ACCESS_TOKEN);
 >>>>>>> 5216a66 (그룹멤버 수 추가)
+=======
+>>>>>>> 62f553a (apiUtil 이용해서 api 접근)
 
     getMyGroups()
     .then((data) => {
@@ -35,6 +42,7 @@ class MyGroups extends Component {
     .catch((error) => {
       this.setState({ error: error.message || "에러 발생", loading: false });
     });
+<<<<<<< HEAD
 <<<<<<< HEAD
 
   }
@@ -47,6 +55,9 @@ class MyGroups extends Component {
     const { groups, loading, error } = this.state;
     
 =======
+=======
+
+>>>>>>> 62f553a (apiUtil 이용해서 api 접근)
   }
 
   render() {

@@ -1,6 +1,9 @@
 import HomeDashboard from '../components/Dashboard/HomeDashboard';
+<<<<<<< HEAD
 import GroupPollList from '../components/Dashboard/GroupPollList';
 import MyComments from '../components/Dashboard/MyComments';
+=======
+>>>>>>> 62f553a (apiUtil 이용해서 api 접근)
 
 import React, { Component } from 'react';
 import './App.css';

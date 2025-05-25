@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import { Modal, Input, message } from 'antd';
+<<<<<<< HEAD
 import { joinGroupByCode } from '../../util/APIUtils';
+=======
+import { ACCESS_TOKEN } from '../../constants';
+>>>>>>> 62f553a (apiUtil 이용해서 api 접근)
 
 class GroupJoinModal extends Component {
   constructor(props) {
@@ -15,6 +19,7 @@ class GroupJoinModal extends Component {
   }
 
   handleSubmit = () => {
+<<<<<<< HEAD
      const { code } = this.state;
 
 joinGroupByCode(code)
@@ -55,6 +60,33 @@ if (typeof this.props.onJoined === 'function') {
 });
   }
   
+=======
+    const { code } = this.state;
+    const token = localStorage.getItem(ACCESS_TOKEN);
+
+    fetch('/api/groups/join', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ code }),
+    })
+      .then(res => {
+        if (!res.ok) throw new Error('입장 실패');
+        return res.json();
+      })
+      .then(data => {
+        message.success(`"${data.name}" 그룹에 입장했어요!`);
+        this.props.onJoined(); // 새로고침 콜백
+        this.props.onClose();  // 모달 닫기
+      })
+      .catch(() => {
+        message.error('유효하지 않은 코드입니다.');
+      });
+  }
+
+>>>>>>> 62f553a (apiUtil 이용해서 api 접근)
   render() {
     const { visible, onClose } = this.props;
 
