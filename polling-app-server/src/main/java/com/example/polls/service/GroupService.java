@@ -28,6 +28,7 @@ public class GroupService {
     private final GroupRepository groupRepository;
     private final UserRepository userRepository;
     private final GroupMemberRepository groupMemberRepository;
+    private static final String DEFAULT_GROUP_IMAGE_URL = "https://icons8.com/icon/DqsRVHkElCJ5/user-group";
 
     @Transactional
     public GroupSummaryResponse createGroup(CreateGroupRequest request,
@@ -35,11 +36,15 @@ public class GroupService {
         //참여 코드 생성
         String joinCode = generateUniqueJoinCode();
 
+        String imageUrl = (request.getImageUrl() == null || request.getImageUrl().isBlank())
+                ? DEFAULT_GROUP_IMAGE_URL
+                : request.getImageUrl();
+
         //그룹 엔티티 생성
         Group group = new Group();
         group.setName(request.getName());
         group.setDescription(request.getDescription());
-        group.setImageUrl(request.getImageUrl());
+        group.setImageUrl(imageUrl);
         group.setJoinCode(joinCode);
 
         //그룹저장
