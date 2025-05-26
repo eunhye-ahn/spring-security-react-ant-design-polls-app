@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import { ACCESS_TOKEN } from '../../constants';
 import "./MyGroups.css";
 
@@ -14,14 +14,35 @@ class MyGroups extends Component {
 
   componentDidMount() {
     const token = localStorage.getItem(ACCESS_TOKEN);
+    console.log('JWT 토큰:', token);
 
-    fetch("/api/groups/my", {
+    if (!token) {
+      this.setState({ error: '로그인 후 이용해 주세요.', loading: false });
+      return;
+    }
+
+    fetch('http://localhost:8080/api/groups/my', {
       headers: {
-        Authorization: `Bearer ${token}`,
-      },
+        Authorization: `Bearer ${token}`
+      }
     })
-      .then((res) => {
-        if (!res.ok) throw new Error("그룹 목록을 불러오지 못했어요.");
+
+      .then(async (res) => {
+        if (!res.ok) {
+          const text = await res.text();
+          let errMsg = "그룹 목록을 불러오지 못했습니다.";
+          try {
+            const json = JSON.parse(text);
+            errMsg = json.message || errMsg;
+          } catch(e) {
+            if (text.startsWith('<!DOCTYPE')) {
+              errMsg = "서버 오류 또는 인증이 필요합니다.";
+            } else {
+              errMsg = text;
+            }
+          }
+          throw new Error(errMsg);
+        }
         return res.json();
       })
       .then((data) => {
@@ -48,7 +69,14 @@ class MyGroups extends Component {
           <div className="group-card-list">
             {groups.map((group) => (
               <div key={group.id} className="group-card">
-                <div className="group-avatar" />
+                <div
+                  className="group-avatar"
+                  style={{
+                    backgroundImage: group.imageUrl
+                      ? `url(${group.imageUrl})`
+                      : 'url(/default-group.png)',
+                  }}
+                />
                 <div className="group-info">
                   <div className="group-name">{group.name}</div>
                   <div className="group-count">멤버 {group.memberCount}명</div>
