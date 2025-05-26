@@ -27,14 +27,18 @@ class GroupCreateModal extends Component {
              throw new Error("응답에 그룹 이름이 없습니다.");
       }
         message.success(`그룹 "${data.name}" 생성 완료`);
-         try {
-        this.props.onCreated();
+
+              if (this.props.onClose) {
         this.props.onClose();
-        } catch (e) {
-        console.error("후처리 중 오류:", e);
       }
 
-      })
+            setTimeout(() => {
+        window.location.reload();
+      }, 500);
+    })
+
+
+
       .catch(() => {
         message.error('그룹 생성에 실패했습니다.');
       });
