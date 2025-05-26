@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { createGroup, getAllUsers } from '../../util/APIUtils';
-import { Modal, Input, message, Checkbox, Spin } from 'antd';
+import { Modal, Input, message} from 'antd';
+import GroupMemberSelector from './GroupMemberSelector';
 
 
 class GroupCreateModal extends Component {
@@ -69,7 +70,7 @@ class GroupCreateModal extends Component {
 
   render() {
     const { visible, onClose } = this.props;
-    const { name, description, imageUrl, users, selectedUserIds,  loading } = this.state;
+    const { name, description, imageUrl, users, selectedUserIds } = this.state;
 
     return (
       <Modal
@@ -80,37 +81,43 @@ class GroupCreateModal extends Component {
         okText="생성"
         cancelText="취소"
       >
+        <div className="form-group">
+          <label className="form-label" style={{display:"flex"}}>그룹 이름<p style={{color : "red"}}> *</p></label>
         <Input
           placeholder="그룹 이름"
           value={name}
           onChange={e => this.handleChange('name', e.target.value)}
           style={{ marginBottom: 12 }}
         />
+        </div>
+          <div className="form-group">
+          <label className="form-label">그룹 소개</label>
         <Input.TextArea
           placeholder="그룹 소개"
           value={description}
           onChange={e => this.handleChange('description', e.target.value)}
+                      maxLength={200}
           rows={3}
           style={{ marginBottom: 12 }}
         />
-        <Input
+                </div>
+
+                <div className="form-group">
+          <label className="form-label">그룹 이미지</label>
+                  <Input
           placeholder="이미지 URL (선택)"
           value={imageUrl}
           onChange={e => this.handleChange('imageUrl', e.target.value)}
         />
-         <div style={{ maxHeight: 150, overflowY: 'auto', border: '1px solid #eee', padding: 8 }}>
-          {loading ? (
-            <Spin />
-          ) : users.map(user => (
-            <Checkbox
-              key={user.id}
-              checked={selectedUserIds.includes(user.id)}
-              onChange={() => this.handleUserSelect(user.id)}
-              style={{ display: 'block', marginBottom: 6 }}
-            >
-              {user.name} ({user.username})
-            </Checkbox>
-          ))}
+        </div>
+                <div className="form-group">
+          <label className="form-label">그룹 멤버 선택</label>
+          
+<GroupMemberSelector
+  users={users}
+  selectedUserIds={selectedUserIds}
+  onChange={(ids) => this.setState({ selectedUserIds: ids })}
+/>
         </div>
       </Modal>
     );
