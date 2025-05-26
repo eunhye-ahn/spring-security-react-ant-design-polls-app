@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { createGroup, getAllUsers } from '../../util/APIUtils';
 import { Modal, Input, message} from 'antd';
 import GroupMemberSelector from './GroupMemberSelector';
@@ -11,6 +12,10 @@ import { ACCESS_TOKEN } from '../../constants';
 >>>>>>> 62f553a (apiUtil 이용해서 api 접근)
 =======
 import { createGroup } from '../../util/APIUtils';
+=======
+import { createGroup, getAllUsers } from '../../util/APIUtils';
+import { Modal, Input, message, Checkbox, Spin } from 'antd';
+>>>>>>> 512ca26 (멤버 추가 로직 생성)
 
 >>>>>>> 59d3021 (그룹 생성 오류 수정)
 
@@ -21,10 +26,14 @@ class GroupCreateModal extends Component {
       name: '',
       description: '',
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 512ca26 (멤버 추가 로직 생성)
       imageUrl: '',
         users: [],
   selectedUserIds: [],
   loading: false
+<<<<<<< HEAD
     };
   }
 
@@ -46,11 +55,31 @@ class GroupCreateModal extends Component {
   }
 
 >>>>>>> 62f553a (apiUtil 이용해서 api 접근)
+=======
+    };
+  }
+
+  componentDidMount() {
+  this.setState({ loading: true });
+  getAllUsers()
+    .then(users => {
+      this.setState({ users, loading: false });
+    })
+    .catch(() => {
+      message.error('유저 목록을 불러오는 데 실패했습니다.');
+      this.setState({ loading: false });
+    });
+}
+
+>>>>>>> 512ca26 (멤버 추가 로직 생성)
   handleChange = (field, value) => {
     this.setState({ [field]: value });
   }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 512ca26 (멤버 추가 로직 생성)
     handleUserSelect = userId => {
     const { selectedUserIds } = this.state;
     const newList = selectedUserIds.includes(userId)
@@ -117,10 +146,14 @@ class GroupCreateModal extends Component {
   render() {
     const { visible, onClose } = this.props;
 <<<<<<< HEAD
+<<<<<<< HEAD
     const { name, description, imageUrl, users, selectedUserIds } = this.state;
 =======
     const { name, description, imageUrl } = this.state;
 >>>>>>> 62f553a (apiUtil 이용해서 api 접근)
+=======
+    const { name, description, imageUrl, users, selectedUserIds,  loading } = this.state;
+>>>>>>> 512ca26 (멤버 추가 로직 생성)
 
     return (
       <Modal
@@ -173,6 +206,7 @@ class GroupCreateModal extends Component {
           onChange={e => this.handleChange('imageUrl', e.target.value)}
         />
 <<<<<<< HEAD
+<<<<<<< HEAD
         </div>
                 <div className="form-group">
           <label className="form-label">그룹 멤버 선택</label>
@@ -185,6 +219,22 @@ class GroupCreateModal extends Component {
         </div>
 =======
 >>>>>>> 62f553a (apiUtil 이용해서 api 접근)
+=======
+         <div style={{ maxHeight: 150, overflowY: 'auto', border: '1px solid #eee', padding: 8 }}>
+          {loading ? (
+            <Spin />
+          ) : users.map(user => (
+            <Checkbox
+              key={user.id}
+              checked={selectedUserIds.includes(user.id)}
+              onChange={() => this.handleUserSelect(user.id)}
+              style={{ display: 'block', marginBottom: 6 }}
+            >
+              {user.name} ({user.username})
+            </Checkbox>
+          ))}
+        </div>
+>>>>>>> 512ca26 (멤버 추가 로직 생성)
       </Modal>
     );
   }

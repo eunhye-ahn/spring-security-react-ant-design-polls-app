@@ -142,6 +142,9 @@ export function createGroup(groupData) {
     body: JSON.stringify(groupData),
   });
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 512ca26 (멤버 추가 로직 생성)
 }
 
 export function getAllUsers(){
@@ -151,6 +154,7 @@ export function getAllUsers(){
     })
 }
 
+<<<<<<< HEAD
 export function joinGroupByCode(joinCode) {
   return request({
     url: API_BASE_URL + "/groups/join",
@@ -171,3 +175,5 @@ export function getPollsByGroupId(groupId) {
 =======
 }
 >>>>>>> 59d3021 (그룹 생성 오류 수정)
+=======
+>>>>>>> 512ca26 (멤버 추가 로직 생성)
