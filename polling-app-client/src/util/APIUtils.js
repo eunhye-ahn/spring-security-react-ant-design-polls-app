@@ -138,3 +138,11 @@ export function createGroup(groupData) {
     body: JSON.stringify(groupData),
   });
 }
+
+export function getAllUsers(){
+    return request({
+        url : API_BASE_URL + "/users/all",
+        method : "GET"
+    })
+}
+

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Modal, Input, message } from 'antd';
-import { createGroup } from '../../util/APIUtils';
+import { createGroup, getAllUsers } from '../../util/APIUtils';
+import { Modal, Input, message, Checkbox, Spin } from 'antd';
 
 
 class GroupCreateModal extends Component {
@@ -9,19 +9,42 @@ class GroupCreateModal extends Component {
     this.state = {
       name: '',
       description: '',
-      imageUrl: ''
+      imageUrl: '',
+        users: [],
+  selectedUserIds: [],
+  loading: false
     };
   }
+
+  componentDidMount() {
+  this.setState({ loading: true });
+  getAllUsers()
+    .then(users => {
+      this.setState({ users, loading: false });
+    })
+    .catch(() => {
+      message.error('유저 목록을 불러오는 데 실패했습니다.');
+      this.setState({ loading: false });
+    });
+}
 
   handleChange = (field, value) => {
     this.setState({ [field]: value });
   }
 
+    handleUserSelect = userId => {
+    const { selectedUserIds } = this.state;
+    const newList = selectedUserIds.includes(userId)
+      ? selectedUserIds.filter(id => id !== userId)
+      : [...selectedUserIds, userId];
+    this.setState({ selectedUserIds: newList });
+  }
+
   handleSubmit = () => {
 
-    const { name, description, imageUrl } = this.state;
+    const { name, description, imageUrl, selectedUserIds } = this.state;
 
-       createGroup({ name, description, imageUrl })
+       createGroup({ name, description, imageUrl, memberIds : selectedUserIds })
       .then(data => {
          if (!data || !data.name) {
              throw new Error("응답에 그룹 이름이 없습니다.");
@@ -46,7 +69,7 @@ class GroupCreateModal extends Component {
 
   render() {
     const { visible, onClose } = this.props;
-    const { name, description, imageUrl } = this.state;
+    const { name, description, imageUrl, users, selectedUserIds,  loading } = this.state;
 
     return (
       <Modal
@@ -75,6 +98,20 @@ class GroupCreateModal extends Component {
           value={imageUrl}
           onChange={e => this.handleChange('imageUrl', e.target.value)}
         />
+         <div style={{ maxHeight: 150, overflowY: 'auto', border: '1px solid #eee', padding: 8 }}>
+          {loading ? (
+            <Spin />
+          ) : users.map(user => (
+            <Checkbox
+              key={user.id}
+              checked={selectedUserIds.includes(user.id)}
+              onChange={() => this.handleUserSelect(user.id)}
+              style={{ display: 'block', marginBottom: 6 }}
+            >
+              {user.name} ({user.username})
+            </Checkbox>
+          ))}
+        </div>
       </Modal>
     );
   }
