@@ -146,3 +146,10 @@ export function getAllUsers(){
     })
 }
 
+export function joinGroupByCode(joinCode) {
+  return request({
+    url: API_BASE_URL + "/groups/join",
+    method: "POST",
+    body: JSON.stringify({ joinCode: String(joinCode) })  // ✅ 필드 이름 수정
+  });
+}

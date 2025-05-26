@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Modal, Input, message } from 'antd';
-import { ACCESS_TOKEN } from '../../constants';
+import { joinGroupByCode } from '../../util/APIUtils';
 
 class GroupJoinModal extends Component {
   constructor(props) {
@@ -15,31 +15,46 @@ class GroupJoinModal extends Component {
   }
 
   handleSubmit = () => {
-    const { code } = this.state;
-    const token = localStorage.getItem(ACCESS_TOKEN);
+     const { code } = this.state;
 
-    fetch('/api/groups/join', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ code }),
-    })
-      .then(res => {
-        if (!res.ok) throw new Error('입장 실패');
-        return res.json();
-      })
-      .then(data => {
-        message.success(`"${data.name}" 그룹에 입장했어요!`);
-        this.props.onJoined(); // 새로고침 콜백
-        this.props.onClose();  // 모달 닫기
-      })
-      .catch(() => {
-        message.error('유효하지 않은 코드입니다.');
-      });
+joinGroupByCode(code)
+    .then(data => {
+      const messageText = (typeof data === 'string')
+  ? data
+  : (data && data.name)
+    ? `"${data.name}" 그룹에 입장했어요!`
+    : '그룹 참여 완료';
+    message.success(messageText);
+
+if (typeof this.props.onJoined === 'function') {
+  this.props.onJoined();
+}
+
+  if (typeof this.props.onClose === 'function') {
+    this.props.onClose();
   }
 
+    setTimeout(() => {
+    window.location.reload(); 
+  }, 500);
+  })
+.catch(error => {
+  const messageText = typeof error.message === 'string' ? error.message : JSON.stringify(error);
+ console.error('Join group error:', error);
+  if (error.status === 409 || messageText.includes('이미')) {
+    message.success('이미 그룹에 참여하셨습니다.');
+
+    if (this.props.onClose) {
+      this.props.onClose();  // ✅ 안전한 방식
+    }
+
+    setTimeout(() => window.location.reload(), 500);
+  } else {
+    message.error('유효하지 않은 코드입니다.');
+  }
+});
+  }
+  
   render() {
     const { visible, onClose } = this.props;
 
