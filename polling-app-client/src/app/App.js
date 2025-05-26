@@ -1,5 +1,5 @@
 import HomeDashboard from '../components/Dashboard/HomeDashboard';
-
+import GroupPollList from '../components/Dashboard/GroupPollList';
 import React, { Component } from 'react';
 import './App.css';
 import {
@@ -121,7 +121,12 @@ class App extends Component {
                   render={(props) => <Profile isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser} {...props}  />}>
                 </Route>
                 <PrivateRoute authenticated={this.state.isAuthenticated} path="/poll/new" component={NewPoll} handleLogout={this.handleLogout}></PrivateRoute>
-                <Route component={NotFound}></Route>
+<PrivateRoute
+  path="/groups/:groupId/polls"
+  component={GroupPollList}
+  authenticated={this.state.isAuthenticated}
+/>                <Route component={NotFound}></Route>
+                
               </Switch>
             </div>
           </Content>

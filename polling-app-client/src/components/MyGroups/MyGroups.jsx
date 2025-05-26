@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import "./MyGroups.css";
+import { withRouter } from 'react-router-dom';
 import { getMyGroups } from '../../util/APIUtils';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 
 class MyGroups extends Component {
@@ -25,8 +28,13 @@ class MyGroups extends Component {
 
   }
 
+    handleGroupClick = (groupId) => {
+    this.props.history.push(`/groups/${groupId}/polls`);
+  };
+
   render() {
     const { groups, loading, error } = this.state;
+    
 
     return (
       <div className="my-groups-container">
@@ -38,24 +46,28 @@ class MyGroups extends Component {
         ) : groups.length === 0 ? (
           <p>참여한 그룹이 없습니다.</p>
         ) : (
-          <div className="group-card-list">
+              <div className="group-list">
             {groups.map((group) => (
-              <div key={group.id} className="group-card">
-                <div className="group-avatar"> 
-                    <img src={group.imageUrl} alt="Group Avatar" />
+    <div key={group.id}>
+      <div className="group-card"
+      onClick={() => this.handleGroupClick(group.id)}
+      style={{ cursor: "pointer" }}>
+        <div className="group-avatar">
+          <img src={group.imageUrl} alt="Group Avatar" />
+        </div>
+        <div className="group-info">
+          <div className="group-name">{group.name}</div>
+         <div className="group-count">
+멤버 {group.memberCount != null ? group.memberCount : 0}명
 </div>
-                
-                <div className="group-info">
-                  <div className="group-name">{group.name}</div>
-                  <div className="group-count">멤버 {group.memberCount}명</div>
-                </div>
-              </div>
-            ))}
-          </div>
+        </div>
+      </div>
+    </div>
+  ))}
+      </div>
         )}
       </div>
     );
   }
 }
-
-export default MyGroups;
+export default withRouter(MyGroups);

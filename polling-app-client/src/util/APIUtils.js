@@ -153,3 +153,10 @@ export function joinGroupByCode(joinCode) {
     body: JSON.stringify({ joinCode: String(joinCode) })  // ✅ 필드 이름 수정
   });
 }
+
+export function getPollsByGroupId(groupId) {
+    return request({
+         url: API_BASE_URL + `/groups/${groupId}/polls`,
+        method: 'GET'
+    });
+}
