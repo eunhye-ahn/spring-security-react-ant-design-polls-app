@@ -14,8 +14,13 @@ import { ACCESS_TOKEN } from '../../constants';
 import { createGroup } from '../../util/APIUtils';
 =======
 import { createGroup, getAllUsers } from '../../util/APIUtils';
+<<<<<<< HEAD
 import { Modal, Input, message, Checkbox, Spin } from 'antd';
 >>>>>>> 512ca26 (멤버 추가 로직 생성)
+=======
+import { Modal, Input, message} from 'antd';
+import GroupMemberSelector from './GroupMemberSelector';
+>>>>>>> 93b26a7 (css 기본 생성스타일 추가)
 
 >>>>>>> 59d3021 (그룹 생성 오류 수정)
 
@@ -147,6 +152,7 @@ class GroupCreateModal extends Component {
     const { visible, onClose } = this.props;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     const { name, description, imageUrl, users, selectedUserIds } = this.state;
 =======
     const { name, description, imageUrl } = this.state;
@@ -154,6 +160,9 @@ class GroupCreateModal extends Component {
 =======
     const { name, description, imageUrl, users, selectedUserIds,  loading } = this.state;
 >>>>>>> 512ca26 (멤버 추가 로직 생성)
+=======
+    const { name, description, imageUrl, users, selectedUserIds } = this.state;
+>>>>>>> 93b26a7 (css 기본 생성스타일 추가)
 
     return (
       <Modal
@@ -165,10 +174,15 @@ class GroupCreateModal extends Component {
         cancelText="취소"
       >
 <<<<<<< HEAD
+<<<<<<< HEAD
         <div className="form-group">
           <label className="form-label" style={{display:"flex"}}>그룹 이름<p style={{color : "red"}}> *</p></label>
 =======
 >>>>>>> 62f553a (apiUtil 이용해서 api 접근)
+=======
+        <div className="form-group">
+          <label className="form-label" style={{display:"flex"}}>그룹 이름<p style={{color : "red"}}> *</p></label>
+>>>>>>> 93b26a7 (css 기본 생성스타일 추가)
         <Input
           placeholder="그룹 이름"
           value={name}
@@ -176,15 +190,22 @@ class GroupCreateModal extends Component {
           style={{ marginBottom: 12 }}
         />
 <<<<<<< HEAD
+<<<<<<< HEAD
         </div>
           <div className="form-group">
           <label className="form-label">그룹 소개</label>
 =======
 >>>>>>> 62f553a (apiUtil 이용해서 api 접근)
+=======
+        </div>
+          <div className="form-group">
+          <label className="form-label">그룹 소개</label>
+>>>>>>> 93b26a7 (css 기본 생성스타일 추가)
         <Input.TextArea
           placeholder="그룹 소개"
           value={description}
           onChange={e => this.handleChange('description', e.target.value)}
+<<<<<<< HEAD
 <<<<<<< HEAD
                       maxLength={200}
           rows={3}
@@ -201,12 +222,26 @@ class GroupCreateModal extends Component {
         />
         <Input
 >>>>>>> 62f553a (apiUtil 이용해서 api 접근)
+=======
+                      maxLength={200}
+          rows={3}
+          style={{ marginBottom: 12 }}
+        />
+                </div>
+
+                <div className="form-group">
+          <label className="form-label">그룹 이미지</label>
+                  <Input
+>>>>>>> 93b26a7 (css 기본 생성스타일 추가)
           placeholder="이미지 URL (선택)"
           value={imageUrl}
           onChange={e => this.handleChange('imageUrl', e.target.value)}
         />
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 93b26a7 (css 기본 생성스타일 추가)
         </div>
                 <div className="form-group">
           <label className="form-label">그룹 멤버 선택</label>
@@ -216,6 +251,7 @@ class GroupCreateModal extends Component {
   selectedUserIds={selectedUserIds}
   onChange={(ids) => this.setState({ selectedUserIds: ids })}
 />
+<<<<<<< HEAD
         </div>
 =======
 >>>>>>> 62f553a (apiUtil 이용해서 api 접근)
@@ -233,6 +269,8 @@ class GroupCreateModal extends Component {
               {user.name} ({user.username})
             </Checkbox>
           ))}
+=======
+>>>>>>> 93b26a7 (css 기본 생성스타일 추가)
         </div>
 >>>>>>> 512ca26 (멤버 추가 로직 생성)
       </Modal>
