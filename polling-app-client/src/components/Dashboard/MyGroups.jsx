@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { ACCESS_TOKEN } from '../../constants';
 import "./MyGroups.css";
 
 class MyGroups extends Component {
@@ -13,7 +12,6 @@ class MyGroups extends Component {
   }
 
   componentDidMount() {
-    const token = localStorage.getItem(ACCESS_TOKEN);
     console.log('JWT 토큰:', token);
 
     if (!token) {

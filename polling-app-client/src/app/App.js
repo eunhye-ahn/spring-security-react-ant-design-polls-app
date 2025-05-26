@@ -1,3 +1,5 @@
+import HomeDashboard from '../components/Dashboard/HomeDashboard';
+
 import React, { Component } from 'react';
 import './App.css';
 import {
@@ -9,7 +11,6 @@ import {
 import { getCurrentUser } from '../util/APIUtils';
 import { ACCESS_TOKEN } from '../constants';
 
-import NewPoll from '../poll/NewPoll';
 import Login from '../user/login/Login';
 import Signup from '../user/signup/Signup';
 import Profile from '../user/profile/Profile';

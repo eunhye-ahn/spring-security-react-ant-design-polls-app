@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Modal, Input, message, Upload, Button } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
+import { Modal, Input, message } from 'antd';
 import { ACCESS_TOKEN } from '../../constants';
 
 class GroupCreateModal extends Component {
@@ -9,23 +8,12 @@ class GroupCreateModal extends Component {
     this.state = {
       name: '',
       description: '',
-      imageUrl: ''  // Base64 또는 업로드된 이미지 URL 저장용
+      imageUrl: ''
     };
   }
 
   handleChange = (field, value) => {
     this.setState({ [field]: value });
-  }
-
-  // 이미지 업로드 시 파일을 Base64로 변환해 상태에 저장
-  beforeUpload = (file) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      this.setState({ imageUrl: reader.result });
-    };
-    // 업로드 버튼 기본 동작 막기 위해 false 반환
-    return false;
   }
 
   handleSubmit = () => {
@@ -67,56 +55,25 @@ class GroupCreateModal extends Component {
         okText="생성"
         cancelText="취소"
       >
-        {/* 그룹 이름 */}
-        <div style={{ marginBottom: 6, fontWeight: '600', color: '#333' }}>
-          그룹 이름 <span style={{ color: 'red' }}>*</span>
-        </div>
         <Input
-          placeholder="그룹 이름을 입력해주세요."
+          placeholder="그룹 이름"
           value={name}
           onChange={e => this.handleChange('name', e.target.value)}
           style={{ marginBottom: 12 }}
         />
-
-        {/* 그룹 소개 */}
-        <div style={{ marginBottom: 6, fontWeight: '600', color: '#333' }}>
-          그룹 소개
-        </div>
-
         <Input.TextArea
-          placeholder="그룹 소개를 입력해주세요."
+          placeholder="그룹 소개"
           value={description}
           onChange={e => this.handleChange('description', e.target.value)}
           rows={3}
           style={{ marginBottom: 12 }}
         />
-
-        {/* 이미지 미리보기 & 업로드 */}
-        {imageUrl && (
-          <img
-            src={imageUrl}
-            alt="그룹 이미지 미리보기"
-            style={{
-              width: 200,
-              height: 200,
-              objectFit: 'cover',
-              borderRadius: 8,
-              marginBottom: 12,
-            }}
-          />
-        )}
-        <div style={{ marginBottom: 8, fontWeight: '600', color: '#333' }}>
-          그룹 이미지
-        </div>
-        <Upload
-          beforeUpload={this.beforeUpload}
-          showUploadList={false}
-          accept="image/*"
-        >
-          <Button icon={<UploadOutlined />}>이미지 업로드</Button>
-        </Upload>
+        <Input
+          placeholder="이미지 URL (선택)"
+          value={imageUrl}
+          onChange={e => this.handleChange('imageUrl', e.target.value)}
+        />
       </Modal>
-
     );
   }
 }
