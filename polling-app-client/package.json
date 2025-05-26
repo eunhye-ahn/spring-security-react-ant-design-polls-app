@@ -2,9 +2,7 @@
   "name": "polling-app-client",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:8080",
   "dependencies": {
-    "@ant-design/icons": "^4.6.2",
     "antd": "^3.2.2",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
