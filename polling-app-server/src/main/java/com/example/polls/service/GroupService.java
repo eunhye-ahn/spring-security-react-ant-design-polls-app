@@ -29,7 +29,9 @@ public class GroupService {
     private final UserRepository userRepository;
     private final GroupMemberRepository groupMemberRepository;
 
+
     private static final String DEFAULT_GROUP_IMAGE_URL = "https://img.icons8.com/?size=100&id=DqsRVHkElCJ5&format=png&color=000000";
+
 
 
     @Transactional

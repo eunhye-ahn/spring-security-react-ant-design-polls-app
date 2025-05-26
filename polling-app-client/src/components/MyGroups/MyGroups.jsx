@@ -98,7 +98,10 @@ class MyGroups extends Component {
           <div className="group-card-list">
             {groups.map((group) => (
               <div key={group.id} className="group-card">
-                <div className="group-avatar" />
+                <div className="group-avatar"> 
+                    <img src={group.imageUrl} alt="Group Avatar" />
+</div>
+                
                 <div className="group-info">
                   <div className="group-name">{group.name}</div>
                   <div className="group-count">멤버 {group.memberCount}명</div>
