@@ -1,5 +1,7 @@
 import HomeDashboard from '../components/Dashboard/HomeDashboard';
 import GroupPollList from '../components/Dashboard/GroupPollList';
+import MyComments from '../components/Dashboard/MyComments';
+
 import React, { Component } from 'react';
 import './App.css';
 import {
@@ -19,6 +21,7 @@ import AppHeader from '../common/AppHeader';
 import NotFound from '../common/NotFound';
 import LoadingIndicator from '../common/LoadingIndicator';
 import PrivateRoute from '../common/PrivateRoute';
+
 
 import { Layout, notification } from 'antd';
 const { Content } = Layout;
@@ -122,12 +125,19 @@ class App extends Component {
                 </Route>
                 <PrivateRoute authenticated={this.state.isAuthenticated} path="/poll/new" component={NewPoll} handleLogout={this.handleLogout}></PrivateRoute>
 <PrivateRoute
-  path="/groups/:groupId/polls"
-  component={GroupPollList}
-  authenticated={this.state.isAuthenticated}
-/>                <Route component={NotFound}></Route>
-                
-              </Switch>
+    path="/groups/:groupId/polls"
+    component={GroupPollList}
+    authenticated={this.state.isAuthenticated}
+  />
+
+  <PrivateRoute
+    path="/polls/:pollId/comments"
+    component={MyComments}
+    authenticated={this.state.isAuthenticated}
+  />
+
+  <Route component={NotFound} />
+</Switch>
             </div>
           </Content>
         </Layout>
