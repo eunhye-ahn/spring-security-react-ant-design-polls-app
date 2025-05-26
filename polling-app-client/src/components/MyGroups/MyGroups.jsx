@@ -1,7 +1,10 @@
 import React, { Component } from "react";
-import { ACCESS_TOKEN } from '../../constants';
 import "./MyGroups.css";
+import { withRouter } from 'react-router-dom';
 import { getMyGroups } from '../../util/APIUtils';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
 
 class MyGroups extends Component {
   constructor(props) {
@@ -14,7 +17,6 @@ class MyGroups extends Component {
   }
 
   componentDidMount() {
-    const token = localStorage.getItem(ACCESS_TOKEN);
 
     getMyGroups()
     .then((data) => {
@@ -23,10 +25,16 @@ class MyGroups extends Component {
     .catch((error) => {
       this.setState({ error: error.message || "에러 발생", loading: false });
     });
+
   }
+
+    handleGroupClick = (groupId) => {
+    this.props.history.push(`/groups/${groupId}/polls`);
+  };
 
   render() {
     const { groups, loading, error } = this.state;
+    
 
     return (
       <div className="my-groups-container">
@@ -38,21 +46,28 @@ class MyGroups extends Component {
         ) : groups.length === 0 ? (
           <p>참여한 그룹이 없습니다.</p>
         ) : (
-          <div className="group-card-list">
+              <div className="group-list">
             {groups.map((group) => (
-              <div key={group.id} className="group-card">
-                <div className="group-avatar" />
-                <div className="group-info">
-                  <div className="group-name">{group.name}</div>
-                  <div className="group-count">멤버 {group.memberCount}명</div>
-                </div>
-              </div>
-            ))}
-          </div>
+    <div key={group.id}>
+      <div className="group-card"
+      onClick={() => this.handleGroupClick(group.id)}
+      style={{ cursor: "pointer" }}>
+        <div className="group-avatar">
+          <img src={group.imageUrl} alt="Group Avatar" />
+        </div>
+        <div className="group-info">
+          <div className="group-name">{group.name}</div>
+         <div className="group-count">
+멤버 {group.memberCount != null ? group.memberCount : 0}명
+</div>
+        </div>
+      </div>
+    </div>
+  ))}
+      </div>
         )}
       </div>
     );
   }
 }
-
-export default MyGroups;
+export default withRouter(MyGroups);

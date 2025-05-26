@@ -12,17 +12,23 @@ const request = (options) => {
     const defaults = {headers: headers};
     options = Object.assign({}, defaults, options);
 
-    return fetch(options.url, options)
-    .then(response => 
-        response.json().then(json => {
-            if(!response.ok) {
-                return Promise.reject(json);
-            }
-            return json;
-        })
-    );
-};
+return fetch(options.url, options)
+ .then(async response => {
+      let json = null;
 
+      try {
+        json = await response.json();
+      } catch (e) {
+        // 응답이 비어 있거나 JSON이 아님
+      }
+
+      if (!response.ok) {
+        throw json || { message: 'Unknown error occurred' };
+      }
+
+      return json;
+    });
+};
 export function getAllPolls(page, size) {
     page = page || 0;
     size = size || POLL_LIST_SIZE;
@@ -121,6 +127,36 @@ export function getUserVotedPolls(username, page, size) {
 export function getMyGroups() {
     return request({
         url: API_BASE_URL + "/groups/my",
+        method: 'GET'
+    });
+}
+
+export function createGroup(groupData) {
+  return request({
+    url: API_BASE_URL + "/groups",
+    method: "POST",
+    body: JSON.stringify(groupData),
+  });
+}
+
+export function getAllUsers(){
+    return request({
+        url : API_BASE_URL + "/users/all",
+        method : "GET"
+    })
+}
+
+export function joinGroupByCode(joinCode) {
+  return request({
+    url: API_BASE_URL + "/groups/join",
+    method: "POST",
+    body: JSON.stringify({ joinCode: String(joinCode) })  // ✅ 필드 이름 수정
+  });
+}
+
+export function getPollsByGroupId(groupId) {
+    return request({
+         url: API_BASE_URL + `/groups/${groupId}/polls`,
         method: 'GET'
     });
 }

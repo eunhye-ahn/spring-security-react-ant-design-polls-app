@@ -18,6 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("/api")
 public class UserController {
@@ -84,4 +87,19 @@ public class UserController {
         return pollService.getPollsVotedBy(username, currentUser, page, size);
     }
 
+
+    @GetMapping("/users/all")
+    public List<UserSummary> getAllUsers(@CurrentUser UserPrincipal currentUser) {
+        List<User> users = userRepository.findAll();
+
+        return users.stream()
+                .filter(user -> !user.getId().equals(currentUser.getId()))
+                .map(user -> new UserSummary(
+                        user.getId(),
+                        user.getUsername(),
+                        user.getName()
+                ))
+                .collect(Collectors.toList());
+
+    }
 }
