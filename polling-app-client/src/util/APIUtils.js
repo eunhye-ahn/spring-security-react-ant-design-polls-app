@@ -130,6 +130,9 @@ export function getMyGroups() {
         method: 'GET'
     });
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 59d3021 (그룹 생성 오류 수정)
 }
 
 export function createGroup(groupData) {
@@ -138,6 +141,7 @@ export function createGroup(groupData) {
     method: "POST",
     body: JSON.stringify(groupData),
   });
+<<<<<<< HEAD
 }
 
 export function getAllUsers(){
@@ -164,3 +168,6 @@ export function getPollsByGroupId(groupId) {
 =======
 }
 >>>>>>> 5216a66 (그룹멤버 수 추가)
+=======
+}
+>>>>>>> 59d3021 (그룹 생성 오류 수정)

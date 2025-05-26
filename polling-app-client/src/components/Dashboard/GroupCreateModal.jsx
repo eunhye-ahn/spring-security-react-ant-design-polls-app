@@ -6,8 +6,13 @@ import GroupMemberSelector from './GroupMemberSelector';
 
 =======
 import { Modal, Input, message } from 'antd';
+<<<<<<< HEAD
 import { ACCESS_TOKEN } from '../../constants';
 >>>>>>> 62f553a (apiUtil 이용해서 api 접근)
+=======
+import { createGroup } from '../../util/APIUtils';
+
+>>>>>>> 59d3021 (그룹 생성 오류 수정)
 
 class GroupCreateModal extends Component {
   constructor(props) {
@@ -78,25 +83,22 @@ class GroupCreateModal extends Component {
 
 =======
   handleSubmit = () => {
-    const { name, description, imageUrl } = this.state;
-    const token = localStorage.getItem(ACCESS_TOKEN);
 
-    fetch('/api/groups', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ name, description, imageUrl }),
-    })
-      .then(res => {
-        if (!res.ok) throw new Error('생성 실패');
-        return res.json();
-      })
+    const { name, description, imageUrl } = this.state;
+
+       createGroup({ name, description, imageUrl })
       .then(data => {
+         if (!data || !data.name) {
+             throw new Error("응답에 그룹 이름이 없습니다.");
+      }
         message.success(`그룹 "${data.name}" 생성 완료`);
-        this.props.onCreated(); // 부모 콜백 실행
-        this.props.onClose();   // 모달 닫기
+         try {
+        this.props.onCreated();
+        this.props.onClose();
+        } catch (e) {
+        console.error("후처리 중 오류:", e);
+      }
+
       })
 >>>>>>> 62f553a (apiUtil 이용해서 api 접근)
       .catch(() => {
