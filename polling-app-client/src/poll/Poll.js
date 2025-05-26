@@ -118,9 +118,6 @@ class Poll extends Component {
                             this.getTimeRemaining(this.props.poll)
                         }
                     </span>
-                    <Link to={`/polls/${this.props.poll.id}/comments`} style={{ marginLeft: 20 }}>
-                        <Button type="link">댓글 보기 / 작성하기</Button>
-                      </Link>
                 </div>
             </div>
         );

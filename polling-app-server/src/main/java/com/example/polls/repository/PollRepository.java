@@ -22,6 +22,4 @@ public interface PollRepository extends JpaRepository<Poll, Long> {
     List<Poll> findByIdIn(List<Long> pollIds);
 
     List<Poll> findByIdIn(List<Long> pollIds, Sort sort);
-
-    Page<Poll> findByGroupId(Long groupId, Pageable pageable);
 }

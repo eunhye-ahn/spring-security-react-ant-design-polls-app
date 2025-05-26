@@ -1,6 +1,5 @@
-package com.example.polls.payload.Response;
+package com.example.polls.payload;
 
-import com.example.polls.payload.UserSummary;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.time.Instant;

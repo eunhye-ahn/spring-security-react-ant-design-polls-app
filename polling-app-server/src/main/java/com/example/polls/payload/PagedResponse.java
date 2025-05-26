@@ -1,4 +1,4 @@
-package com.example.polls.payload.Response;
+package com.example.polls.payload;
 
 import java.util.List;
 

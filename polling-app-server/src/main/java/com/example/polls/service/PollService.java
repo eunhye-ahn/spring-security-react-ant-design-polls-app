@@ -3,11 +3,13 @@ package com.example.polls.service;
 import com.example.polls.exception.BadRequestException;
 import com.example.polls.exception.ResourceNotFoundException;
 import com.example.polls.model.*;
-import com.example.polls.payload.Request.PollRequest;
-import com.example.polls.payload.Request.VoteRequest;
-import com.example.polls.payload.Response.PagedResponse;
-import com.example.polls.payload.Response.PollResponse;
-import com.example.polls.repository.*;
+import com.example.polls.payload.PagedResponse;
+import com.example.polls.payload.PollRequest;
+import com.example.polls.payload.PollResponse;
+import com.example.polls.payload.VoteRequest;
+import com.example.polls.repository.PollRepository;
+import com.example.polls.repository.UserRepository;
+import com.example.polls.repository.VoteRepository;
 import com.example.polls.security.UserPrincipal;
 import com.example.polls.util.AppConstants;
 import com.example.polls.util.ModelMapper;
@@ -29,7 +31,6 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-
 @Service
 public class PollService {
 
@@ -43,36 +44,6 @@ public class PollService {
     private UserRepository userRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(PollService.class);
-    @Autowired
-    private GroupRepository groupRepository;
-    @Autowired
-    private GroupService groupService;
-    @Autowired
-    private GroupMemberRepository groupMemberRepository;
-
-
-    private PagedResponse<PollResponse> mapPollPagetoPageResponse(UserPrincipal currentUser, Page<Poll> polls) {
-        if(polls.getNumberOfElements() == 0) {
-            return new PagedResponse<>(Collections.emptyList(), polls.getNumber(),
-                    polls.getSize(), polls.getTotalElements(), polls.getTotalPages(), polls.isLast());
-        }
-
-        List<Long> pollIds = polls.map(Poll::getId).getContent();
-        Map<Long, Long> choiceVoteCountMap = getChoiceVoteCountMap(pollIds);
-        Map<Long, Long> pollUserVoteMap = getPollUserVoteMap(currentUser, pollIds);
-        Map<Long, User> creatorMap = getPollCreatorMap(polls.getContent());
-
-        List<PollResponse> pollResponses = polls.map(poll -> ModelMapper.mapPollToPollResponse(
-                poll,
-                choiceVoteCountMap,
-                creatorMap.get(poll.getCreatedBy()),
-                pollUserVoteMap == null ? null : pollUserVoteMap.getOrDefault(poll.getId(), null)
-        )).getContent();
-
-        return new PagedResponse<>(pollResponses, polls.getNumber(),
-                polls.getSize(), polls.getTotalElements(), polls.getTotalPages(), polls.isLast());
-    }
-
 
     public PagedResponse<PollResponse> getAllPolls(UserPrincipal currentUser, int page, int size) {
         validatePageNumberAndSize(page, size);
@@ -81,27 +52,27 @@ public class PollService {
         Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
         Page<Poll> polls = pollRepository.findAll(pageable);
 
-        return mapPollPagetoPageResponse(currentUser, polls);
-    }
-
-    public PagedResponse<PollResponse> getAllPollsInGroup(Long groupId, UserPrincipal userPrincipal, int page, int size) {
-        //그룹 유효성검사
-        Group group = groupRepository.findById(groupId)
-                .orElseThrow(() -> new ResourceNotFoundException("Group", "id", groupId));
-
-        //그룹 멤버 인증
-        if(!groupMemberRepository.existsByUserIdAndGroupId(userPrincipal.getId(), groupId)) {
-            throw new BadRequestException("그룹에 가입된 사용자만 투표를 조회할 수 있습니다.");
+        if(polls.getNumberOfElements() == 0) {
+            return new PagedResponse<>(Collections.emptyList(), polls.getNumber(),
+                    polls.getSize(), polls.getTotalElements(), polls.getTotalPages(), polls.isLast());
         }
 
-        //page 표시 정보 설정하기
-        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
-        //결과 데이터 가져오기
-        Page<Poll> polls = pollRepository.findByGroupId(groupId, pageable);
+        // Map Polls to PollResponses containing vote counts and poll creator details
+        List<Long> pollIds = polls.map(Poll::getId).getContent();
+        Map<Long, Long> choiceVoteCountMap = getChoiceVoteCountMap(pollIds);
+        Map<Long, Long> pollUserVoteMap = getPollUserVoteMap(currentUser, pollIds);
+        Map<Long, User> creatorMap = getPollCreatorMap(polls.getContent());
 
-        return mapPollPagetoPageResponse(userPrincipal, polls);
+        List<PollResponse> pollResponses = polls.map(poll -> {
+            return ModelMapper.mapPollToPollResponse(poll,
+                    choiceVoteCountMap,
+                    creatorMap.get(poll.getCreatedBy()),
+                    pollUserVoteMap == null ? null : pollUserVoteMap.getOrDefault(poll.getId(), null));
+        }).getContent();
+
+        return new PagedResponse<>(pollResponses, polls.getNumber(),
+                polls.getSize(), polls.getTotalElements(), polls.getTotalPages(), polls.isLast());
     }
-
 
     public PagedResponse<PollResponse> getPollsCreatedBy(String username, UserPrincipal currentUser, int page, int size) {
         validatePageNumberAndSize(page, size);
@@ -172,49 +143,29 @@ public class PollService {
     }
 
 
-    private Poll createPollInternal(PollRequest request, Long createdBy, Group group) {
+    public Poll createPoll(PollRequest pollRequest) {
         Poll poll = new Poll();
-        poll.setQuestion(request.getQuestion());
+        poll.setQuestion(pollRequest.getQuestion());
 
-        if (createdBy != null) {
-            poll.setCreatedBy(createdBy);
-        }
-
-        if (group != null) {
-            poll.setGroup(group);
-        }
-
-        request.getChoices().forEach(choiceRequest -> {
+        pollRequest.getChoices().forEach(choiceRequest -> {
             poll.addChoice(new Choice(choiceRequest.getText()));
         });
 
         Instant now = Instant.now();
-        Instant expirationDateTime = now.plus(Duration.ofDays(request.getPollLength().getDays()))
-                .plus(Duration.ofHours(request.getPollLength().getHours()));
+        Instant expirationDateTime = now.plus(Duration.ofDays(pollRequest.getPollLength().getDays()))
+                .plus(Duration.ofHours(pollRequest.getPollLength().getHours()));
+
         poll.setExpirationDateTime(expirationDateTime);
 
         return pollRepository.save(poll);
     }
 
-    public Poll createPoll(PollRequest pollRequest) {
-        return createPollInternal(pollRequest, null, null);
-    }
+    public PollResponse getPollById(Long pollId, UserPrincipal currentUser) {
+        Poll poll = pollRepository.findById(pollId).orElseThrow(
+                () -> new ResourceNotFoundException("Poll", "id", pollId));
 
-    //그룹 투표 생성
-    public Poll createPollInGroup(Long groupId, PollRequest request, UserPrincipal userPrincipal) {
-        //그룹 엔티티 조회
-        Group group = groupRepository.findById(groupId)
-                    .orElseThrow(() -> new ResourceNotFoundException("Group", "id", groupId));
-        boolean isMember = groupMemberRepository.existsByUserIdAndGroupId(userPrincipal.getId(), groupId);
-        if(!isMember) {
-            throw new BadRequestException("해당 그룹에 가입된 자만 투표할 수 있습니다.");
-        }
-        //저장
-        return createPollInternal(request, userPrincipal.getId(), group);
-    }
-
-    public PollResponse buildPollResponse(Poll poll, UserPrincipal currentUser) {
-        List<ChoiceVoteCount> votes = voteRepository.countByPollIdGroupByChoiceId(poll.getId());
+        // Retrieve Vote Counts of every choice belonging to the current poll
+        List<ChoiceVoteCount> votes = voteRepository.countByPollIdGroupByChoiceId(pollId);
 
         Map<Long, Long> choiceVotesMap = votes.stream()
                 .collect(Collectors.toMap(ChoiceVoteCount::getChoiceId, ChoiceVoteCount::getVoteCount));
@@ -226,36 +177,11 @@ public class PollService {
         // Retrieve vote done by logged in user
         Vote userVote = null;
         if(currentUser != null) {
-            userVote = voteRepository.findByUserIdAndPollId(currentUser.getId(), poll.getId());
+            userVote = voteRepository.findByUserIdAndPollId(currentUser.getId(), pollId);
         }
 
         return ModelMapper.mapPollToPollResponse(poll, choiceVotesMap,
                 creator, userVote != null ? userVote.getChoice().getId(): null);
-    }
-
-    public PollResponse getPollById(Long pollId, UserPrincipal currentUser) {
-        Poll poll = pollRepository.findById(pollId).orElseThrow(
-                () -> new ResourceNotFoundException("Poll", "id", pollId));
-
-        return buildPollResponse(poll, currentUser);
-    }
-
-    public PollResponse  getPollByIdInGroup(Long pollId, Long groupId, UserPrincipal currentUser) {
-        Group group = groupRepository.findById(groupId)
-                .orElseThrow(() -> new ResourceNotFoundException("Group", "id", groupId));
-        boolean isMember = groupMemberRepository.existsByUserIdAndGroupId(currentUser.getId(), groupId);
-        if(!isMember) {
-            throw new BadRequestException("해당 그룹에 가입된 사용자만 투표를 조회할 수 있습니다.");
-        }
-
-        Poll poll = pollRepository.findById(pollId).orElseThrow(
-                () -> new ResourceNotFoundException("Poll", "id", pollId)
-                );
-        if(poll.getGroup() != null && !poll.getGroup().getId().equals(groupId)) {
-            throw new BadRequestException("해당 투표는 요청한 그룹에 속하지 않습니다.");
-        }
-
-        return buildPollResponse(poll, currentUser);
     }
 
     public PollResponse castVoteAndGetUpdatedPoll(Long pollId, VoteRequest voteRequest, UserPrincipal currentUser) {

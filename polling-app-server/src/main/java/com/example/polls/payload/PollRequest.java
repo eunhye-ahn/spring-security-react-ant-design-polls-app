@@ -1,6 +1,4 @@
-package com.example.polls.payload.Request;
-
-import com.example.polls.payload.PollLength;
+package com.example.polls.payload;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
