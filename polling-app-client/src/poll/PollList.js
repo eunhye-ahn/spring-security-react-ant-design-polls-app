@@ -142,8 +142,10 @@ class PollList extends Component {
     }
 
     render() {
+         const publicPolls = this.state.polls.filter(poll => !poll.groupId);  
+
         const pollViews = [];
-        this.state.polls.forEach((poll, pollIndex) => {
+        publicPolls.forEach((poll, pollIndex) => {
             pollViews.push(<Poll 
                 key={poll.id} 
                 poll={poll}
@@ -153,10 +155,12 @@ class PollList extends Component {
         });
 
         return (
+
+            
             <div className="polls-container">
                 {pollViews}
                 {
-                    !this.state.isLoading && this.state.polls.length === 0 ? (
+                     !this.state.isLoading && publicPolls.length === 0 ? (
                         <div className="no-polls-found">
                             <span>No Polls Found.</span>
                         </div>    

@@ -1,5 +1,7 @@
 package com.example.polls.controller;
 
+import com.example.polls.model.Group;
+import com.example.polls.payload.Request.GroupPollRequest;
 import com.example.polls.payload.Request.PollRequest;
 import com.example.polls.payload.Request.VoteRequest;
 import com.example.polls.payload.Response.ApiResponse;
@@ -25,10 +27,10 @@ public class GroupPollController {
 
     @PostMapping
     public ResponseEntity<?> createPollInGroup (@PathVariable Long groupId,
-            @CurrentUser UserPrincipal currentUser,
-            @Valid @RequestBody PollRequest request) {
+                                                @CurrentUser UserPrincipal currentUser,
+                                                @Valid @RequestBody GroupPollRequest request) {
         groupService.validateGroupMember(groupId, currentUser.getId());
-        pollService.createPollInGroup(groupId, request, currentUser);
+        pollService.createPollInGroup(groupId, request.getPoll(), currentUser);
         return ResponseEntity.ok(new ApiResponse(true, "Poll Created Successfully"));
     }
 
